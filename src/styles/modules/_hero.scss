@@ -1,0 +1,50 @@
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__container {
+    display: grid;
+    grid-template-columns: 50% 1fr;
+    gap: 64px;
+  }
+
+  &__content {
+  }
+
+  &__title {
+  }
+
+  &__icon {
+  }
+
+  &__subtitle {
+    color: #555;
+  }
+
+  &__actions {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+  }
+
+  &__image {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    img {
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    &__container {
+      grid-template-columns: 100%;
+    }
+
+    &__image {
+      display: none;
+    }
+  }
+}

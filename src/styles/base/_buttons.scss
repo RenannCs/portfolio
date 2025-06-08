@@ -1,2 +1,76 @@
-.button{
+@import "./mixins";
+.button {
+  background-color: $primaryColor;
+  color: #fff;
+  border: none;
+  padding: 0.6em 1.2em;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  text-decoration: none;
+  user-select: none;
+
+  &:hover,
+  &:focus {
+    background-color: darken($primaryColor, 10%);
+    outline: none;
+  }
+
+  &:disabled,
+  &[disabled] {
+    filter: grayscale(50%);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  &--arrow {
+    &::after {
+      content: "→";
+      margin-left: 0.5em;
+      font-weight: 700;
+      transition: transform 0.3s;
+      display: inline-block;
+    }
+    &:hover::after,
+    &:focus::after {
+      transform: translateX(4px);
+    }
+  }
+
+  &--outline {
+    background-color: transparent;
+    border: 2px solid $primaryColor;
+    color: $primaryColor;
+
+    &:hover,
+    &:focus {
+      background-color: $primaryColor;
+      color: #fff;
+    }
+  }
+
+  &--primary {
+    @include button-variant($primaryColor);
+  }
+
+  &--secondary {
+    @include button-variant($secondaryColor);
+  }
+
+  &--tertiary {
+    @include button-variant($tertiaryColor);
+  }
+
+  &--quaternary {
+    @include button-variant($quaternaryColor);
+  }
+
+  &--quinary {
+    @include button-variant($quinaryColor);
+  }
 }
