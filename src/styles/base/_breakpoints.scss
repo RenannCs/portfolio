@@ -1,0 +1,52 @@
+.center {
+  margin: 0 auto;
+  width: 90%; 
+}
+
+html {
+  font-size: 12px; 
+}
+
+@media (min-width: $breakpoint-xs) {
+  html {
+    font-size: 14px;
+  }
+}
+
+// Small devices (≥ 480px)
+@media (min-width: $breakpoint-sm) {
+  html {
+    font-size: 15px;
+  }
+}
+
+// Medium devices (≥ 768px)
+@media (min-width: $breakpoint-md) {
+  html {
+    font-size: 16px;
+  }
+  .center {
+    max-width: 768px;
+  }
+}
+
+// Large devices (≥ 992px)
+@media (min-width: $breakpoint-lg) {
+  .center {
+    max-width: 960px;
+  }
+}
+
+// Extra large devices (≥ 1200px)
+@media (min-width: $breakpoint-xl) {
+  .center {
+    max-width: 1200px;
+  }
+}
+
+// Extra extra large devices (≥ 1400px)
+@media (min-width: $breakpoint-xxl) {
+  .center {
+    max-width: 1400px;
+  }
+}
