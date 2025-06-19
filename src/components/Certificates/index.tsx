@@ -1,15 +1,16 @@
-import { getCertificates } from "@/lib/api/certificateService";
+import { getCertificateSection } from "@/lib/api/certificateService";
 import SwiperCertificates from "./SwiperCertificates";
 
 export default async function Certificates() {
-  const certificates = await getCertificates();
-  if (!certificates) return null;
+  const certificatesSection = await getCertificateSection();
+  if (!certificatesSection) return null;
 
   return (
     <section className="certificates section-line">
       <div className="certificates__container">
-        <h2 className="certificates__title">Certificados</h2>
-        <SwiperCertificates certificates={certificates} />
+        <h2 className="certificates__title">{certificatesSection.title}</h2>
+        {certificatesSection.description && (<p className="certificates__description">{certificatesSection.description}</p>)}
+        <SwiperCertificates certificates={certificatesSection.certificates} />
       </div>
     </section>
   );

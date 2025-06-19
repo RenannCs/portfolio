@@ -14,8 +14,8 @@ export default function SwiperCertificates({ certificates }: SwiperProps) {
   return (
     <Swiper
       modules={[Autoplay, FreeMode]}
-      spaceBetween={30}
-      slidesPerView={4}
+      spaceBetween={20}
+      slidesPerView={1}
       loop={true}
       speed={6000}
       autoplay={{
@@ -24,6 +24,20 @@ export default function SwiperCertificates({ certificates }: SwiperProps) {
       }}
       freeMode={true}
       className="certificates__items"
+      breakpoints={{
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 25,
+        },
+        1024: {
+          slidesPerView: 4,
+          spaceBetween: 30,
+        },
+      }}
     >
       {certificates.map(({ label, image }, index) => (
         <SwiperSlide key={index} style={{ width: 'auto' }}>

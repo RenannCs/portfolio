@@ -1,34 +1,39 @@
-export interface Certificate {
-  label: string;
-  image: string;
+import { Connection } from "./connection";
+
+export interface CertificateSection {
+  title: string;
   description: string;
+  anchor: string;
+  certificates: Certificate[];
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const REQUEST_URL = `${API_URL}/api`;
+export interface Certificate {
+  label: string;
+  description: string;
+  image: string;
+}
 
+const api = new Connection();
 
-export async function getCertificates(): Promise<Certificate[] | null> {
-  try {
-    const res = await fetch(`${REQUEST_URL}/certificates?populate=Image`);
+function mapCertificates(data: any[], baseUrl: string): Certificate[] {
+  return (data || []).map((item) => ({
+    label: item.label || "",
+    description: item.description || "",
+    image: item.image?.url ? baseUrl + item.image.url : "",
+  }));
+}
 
-    if (!res.ok) throw new Error("Falha ao buscar dados dos certificados");
+export async function getCertificateSection(): Promise<CertificateSection | null> {
+  const params = new URLSearchParams();
+  params.append("populate[certificates][populate]", "image");
 
-    const json = await res.json();
+  const queryString = params.toString();
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
-    const certificates: Certificate[] = (json.data || []).map((item: any) => {
-      return {
-        label: item.Label || "",
-
-        image: item.Image?.url ? API_URL + item.Image.url : "",
-
-        description: item.Description || [],  
-      };
-    });
-
-    return certificates;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
+  return api.get<CertificateSection | null>(`certificate-section?${queryString}`, {}, (data) => ({
+    title: data.title || "",
+    description: data.description || "",
+    anchor: data.anchor || "",
+    certificates: mapCertificates(data.certificates || [], API_URL),
+  }));
 }
