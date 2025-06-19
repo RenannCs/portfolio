@@ -4,10 +4,10 @@ import Certificates from "@/components/Certificates";
 
 export default function Home() {
   return (
-    <>
+    <main>
       <Header />
       <Hero />
       <Certificates />
-    </>
+    </main>
   );
 }
