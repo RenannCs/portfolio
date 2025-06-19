@@ -1,58 +1,46 @@
-export interface HeroData {
+import { Connection } from "./connection";
+import { Button, Icon } from "@/types/common";
+
+export interface HeroSection {
+  anchor: string;
   title: string;
-  subtitle: string;
+  description: string;
   image: string;
-  icons: HeroIcon[];
-  buttons: HeroButton[];
+  icons: Icon[];
+  buttons: Button[];
 }
 
-export interface HeroButton {
-  label: string;
-  link: string;
+const api = new Connection();
+
+function mapIcons(icons: any[], baseUrl: string): Icon[] {
+  return (icons || []).map((icon) => ({
+    label: icon.label || "",
+    image: icon.image?.[0]?.url ? baseUrl + icon.image[0].url : "",
+  }));
 }
 
-export interface HeroIcon {
-  label: string;
-  image: string;
+function mapButtons(buttons: any[]): Button[] {
+  return (buttons || []).map((btn) => ({
+    label: btn.label,
+    link: btn.link,
+  }));
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const REQUEST_URL = `${API_URL}/api`;
+export async function getHero(): Promise<HeroSection | null> {
+  const params = new URLSearchParams();
+  params.append("populate[icons][populate]", "image");
+  params.append("populate[image][populate]", "*");
+  params.append("populate[buttons][populate]", "*");
 
-export async function getHero(): Promise<HeroData | null> {
-  try {
-    const res = await fetch(
-      `${REQUEST_URL}/hero-sections?populate[Icons][populate]=Image&populate[Image][populate]&populate[Buttons][populate]`
-    );
-
-    if (!res.ok) throw new Error("Falha ao buscar dados do Hero");
-
-    const json = await res.json();
-    const data = json.data?.[0];
-
-    if (!data) return null;
-
-    const icons: HeroIcon[] = (data.Icons || []).map((icon: any) => {
-      const label = icon.Label || "";
-      const imageUrl = icon.Image?.[0]?.url ? API_URL + icon.Image[0].url : "";
-      return { label, image: imageUrl };
-    });
-
-    const buttons: HeroButton[] = (data.Buttons || [])
-      .filter((button: any) => button.Label && button.Link)
-      .map((button: any) => ({
-        label: button.Label,
-        link: button.Link,
-      }));
-
-    return {
-      title: data.Title || "",
-      subtitle: data.Subtitle || "",
-      image: data.Image?.url ? API_URL + data.Image.url : "",
-      icons,
-      buttons,
-    };
-  } catch (error) {
-    return null;
-  }
+  const queryString = params.toString();
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+  
+  return api.get<HeroSection>(`hero-section?${queryString}`, {}, (data) => ({
+    anchor: data.anchor || "",
+    title: data.title || "",
+    description: data.description || "",
+    image: data.image?.url ? API_URL + data.image.url : "",
+    icons: mapIcons(data.icons, API_URL),
+    buttons: mapButtons(data.buttons),
+  }));
 }
